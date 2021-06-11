@@ -1,0 +1,26 @@
+*~
+*.swp
+*.log
+
+/docs/
+
+# \ python
+/bin/activate*
+/bin/easy_install*
+/bin/pip*
+/bin/py*test*
+/bin/python*
+/lib/python*
+/bin/autopep8*
+/bin/pycodestyle*
+/bin/sqlformat*
+/bin/flask*
+/bin/watchmedo
+/lib64
+/share/
+/pyvenv.cfg
+__pycache__/
+*.pyc
+# / python
+
+!.gitignore

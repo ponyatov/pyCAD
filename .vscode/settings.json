@@ -1,0 +1,62 @@
+{
+    // \ py
+    "python.pythonPath"              : "./bin/python3",
+    "python.formatting.provider"     : "autopep8",
+    "python.formatting.autopep8Path" : "./bin/autopep8",
+    "python.formatting.autopep8Args" : ["--ignore=E26,E302,E305,E401,E402,E701,E702"],
+    // / py
+    // \ multi
+    "multiCommand.commands": [
+        {
+            "command": "multiCommand.f11",
+            "sequence": [
+                "workbench.action.files.saveAll",
+                {"command": "workbench.action.terminal.sendSequence",
+                    "args": {"text": "\u000D clear ; make repl \u000D"}}
+            ]
+        },
+        {
+            "command": "multiCommand.f12",
+            "sequence": [
+                "workbench.action.files.saveAll",
+                {"command": "workbench.action.terminal.sendSequence",
+                    "args": {"text": "\u000Dos._exit(0)\u000D"}}
+            ]
+        },
+    ],
+    // / multi
+
+    // \ files
+    "files.watcherExclude": {
+        "**/docs/**":true,
+        // \ py
+        "**/bin/**":true, "**/lib/**":true, "**/lib64":true,
+        "**/include/**":true, "**/share/**":true,
+        "**/__pycache__/**":true, "**/.pytest_cache/**":true,
+        "**/pyvenv.cfg":true
+        // / py
+    },
+    "files.exclude": {
+        "**/docs/**":true,
+        // \ py
+        "**/bin/**":true, "**/lib/**":true, "**/lib64":true,
+        "**/include/**":true, "**/share/**":true,
+        "**/__pycache__/**":true, "**/.pytest_cache/**":true,
+        "**/pyvenv.cfg":true
+        // / py
+    },
+    "files.associations": {
+        "requirements.*": "config",
+    },
+    // / files
+
+    // \ editor
+    "editor.tabSize": 4,
+    "editor.rulers": [80],
+    "workbench.tree.indent": 32,
+    // / editor
+
+    // \ misc
+    "browser-preview.startUrl": "127.0.0.1:43550/"
+    // / misc
+}
