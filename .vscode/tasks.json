@@ -1,0 +1,46 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label"          : "project: install",
+            "type"           : "shell",
+            "command"        : "make install",
+            "presentation"   : {"focus": true},
+            "problemMatcher" : []
+        },
+        {
+            "label"          : "project: update",
+            "type"           : "shell",
+            "command"        : "make update",
+            "presentation"   : {"focus": true},
+            "problemMatcher" : []
+        },
+        {
+            "label"          : "git: seek",
+            "type"           : "shell",
+            "command"        : "make seek",
+            "problemMatcher" : []
+        },
+        {
+            "label"          : "git: dev",
+            "type"           : "shell",
+            "command"        : "make dev",
+            "problemMatcher" : []
+        },
+        {
+            "label"          : "git: checkout .vscode",
+            "type"           : "shell",
+            "command"        : "git checkout .vscode/settings.json",
+            "presentation"   : {"showReuseMessage": false, "focus": false, "reveal": "silent", "close": true},
+            "problemMatcher" : []
+        },
+        {
+            "label"          : "python: run",
+            "type"           : "shell",
+            "command"        : "python3 src/${workspaceFolderBasename}.py lib/${workspaceFolderBasename}.ini",
+            "problemMatcher" : [],
+            "presentation"   : {"showReuseMessage": false, "focus": false, "reveal": "silent"},
+            "group"          : {"kind": "build","isDefault": true}
+        }
+    ]
+}
