@@ -20,7 +20,12 @@ from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QMainWindow, QMessageBox
 from PyQt6.QtCore import QStandardPaths, QSettings
 from PyQt6.QtGui import QPalette, QColor, QKeySequence, QAction, QIcon
-from PyQt6.QtWidgets import QMenuBar, QMenu, QToolBar
+from PyQt6.QtWidgets import QMenuBar, QMenu, QToolBar, QTreeView, QDockWidget
+
+class FileBrowser(QDockWidget):
+    def __init__(self, parent=None):
+        super().__init__("File Browser", parent)
+        self.setObjectName("FileBrowser")
 
 class MainWindow(QMainWindow):
     def __init__(self, app):
@@ -41,6 +46,8 @@ class MainWindow(QMainWindow):
         self.sch()
         self.cir()
         self.pcb()
+        self.cable()
+        self.mech()
         self.lib()
         self.option()
         self.help()
@@ -73,6 +80,14 @@ class MainWindow(QMainWindow):
         self.menubar.pcb = QMenu('&PCB', self)
         self.menubar.addMenu(self.menubar.pcb)
 
+    def cable(self):
+        self.menubar.cable = QMenu('C&able', self)
+        self.menubar.addMenu(self.menubar.cable)
+
+    def mech(self):
+        self.menubar.mech = QMenu('Mechanic', self)
+        self.menubar.addMenu(self.menubar.mech)
+
     def lib(self):
         self.menubar.lib = QMenu('&Lib', self)
         self.menubar.addMenu(self.menubar.lib)
@@ -84,10 +99,14 @@ class MainWindow(QMainWindow):
         self.menubar.lib.addAction(self.menubar.lib.pin)
         self.menubar.lib.pad = QAction('&Pad')
         self.menubar.lib.addAction(self.menubar.lib.pad)
+        self.menubar.lib.wire = QAction('&Wire')
+        self.menubar.lib.addAction(self.menubar.lib.wire)
         self.menubar.lib.board = QAction('&Board')
         self.menubar.lib.addAction(self.menubar.lib.board)
         self.menubar.lib.board = QAction('&Board')
         self.menubar.lib.addAction(self.menubar.lib.board)
+        self.menubar.lib.cable = QAction('C&able')
+        self.menubar.lib.addAction(self.menubar.lib.cable)
         self.menubar.lib.case = QAction('&Case')
         self.menubar.lib.addAction(self.menubar.lib.case)
 
