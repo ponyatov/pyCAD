@@ -1,8 +1,17 @@
 [project]
 name = "pycad"
 description = "2D CAD for Electronics Design /Python/"
-authors = ["Dmitry Ponyatov <dponyatov@gmail.com>", "DeepSeek Chat"]
+authors = [
+    { name = "Dmitry Ponyatov", email = "<dponyatov@gmail.com>" },
+    { name = "DeepSeek Chat" },
+]
 dynamic = ["version"]
+requires-python = ">= 3.11"
+dependencies = ["PyQt6 >= 6.4.2", "ply >= 3.11"]
 
 [build-system]
-requires = ["PyQt6 => 6.4.2", "ply >= 3.11"]
+requires = ["setuptools", "wheel", "setuptools-git-versioning"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools-git-versioning]
+enabled = true
