@@ -19,15 +19,8 @@ import sys
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QMainWindow, QMessageBox
 from PyQt6.QtCore import QStandardPaths, QSettings, Qt
-from PyQt6.QtGui import QPalette, QColor, QKeySequence, QAction, QIcon
+from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
-
-class FileBrowser(QDockWidget):
-    def __init__(self, parent=None):
-        super().__init__("File Browser", parent)
-        self.setObjectName("FileBrowser")
-        #
-        self.tree = QTreeView()
 
 
 class MainWindow(QMainWindow):
@@ -35,6 +28,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.app = app
         self.setWindowTitle(Info.APP); self.setWindowIcon(app.icon)
+        # self.showFullScreen()
         self.settings = QSettings(Info.APP, "Theme")
         self._load_theme()
         self.layout = QHBoxLayout(); self.setLayout(self.layout)
@@ -43,7 +37,8 @@ class MainWindow(QMainWindow):
         self.menu()
         self.status()
         self.edit()
-        self.file()
+        self.filetree()
+        self.shell()
 
     def status(self):
         self.statusbar = QStatusBar()
@@ -55,15 +50,34 @@ class MainWindow(QMainWindow):
         self.editor = QTextEdit()
         self.setCentralWidget(self.editor)
 
-    def file(self):
-        self.files = QDockWidget('Files', self)
+    def shell(self):
+        self.shell = QDockWidget(os.getcwd(), self)
+        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.shell)
+        self.shell.container = QWidget()
+        self.shell.setWidget(self.shell.container)
+        self.shell.layout = QVBoxLayout()
+        self.shell.container.setLayout(self.shell.layout)
+        self.shell.layout.setContentsMargins(0, 0, 0, 0)
+        # output
+        self.shell.output = QTextEdit()
+        self.shell.output.setFont(QFont("Monospace", 10))
+        self.shell.layout.addWidget(self.shell.output)
+        # input
+        self.shell.input = QLineEdit()
+        self.shell.input.setFont(QFont("Monospace", 10))
+        self.shell.layout.addWidget(self.shell.input)
+        # size
+        self.shell.setMinimumHeight(100)
+
+    def filetree(self):
+        self.files = QDockWidget(os.getcwd(), self)
         self.files.tree = QListWidget()
-        self.files.tree.addItem('Item1')
-        self.files.tree.addItem('Item2')
-        self.files.tree.addItem('Item3')
-        self.files.tree.addItem('Item4')
+        # self.files.tree.addItem('Item1')
+        # self.files.tree.addItem('Item2')
+        # self.files.tree.addItem('Item3')
+        # self.files.tree.addItem('Item4')
         self.files.setWidget(self.files.tree)
-        self.files.setFloating(False)
+        # self.files.setFloating(False)
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.files)
 
     def menu(self):
