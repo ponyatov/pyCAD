@@ -75,6 +75,10 @@ class MainWindow(QMainWindow):
         self.menubar.addMenu(self.menubar.help)
         self.menubar.help.about = QAction("&About\tF1", self)
         self.menubar.help.addAction(self.menubar.help.about)
+        self.menubar.help.about.triggered.connect(self.about)
+
+    def about(self):
+        print(self)
 
     def _load_theme(self):
         self.style = self.settings.value("style", "Fusion")
@@ -90,8 +94,9 @@ class MainWindow(QMainWindow):
 
 class pyCAD(QApplication):
     def __init__(self):
-        self.app = QApplication(sys.argv)
-        self.win = MainWindow(self.app)
+        QApplication.__init__(self, sys.argv)
+        self.win = MainWindow(self)
+        self.setQuitOnLastWindowClosed(True)
         self.config()
         self.theme()
 
@@ -112,7 +117,7 @@ class pyCAD(QApplication):
 
     def run(self):
         self.win.show()
-        sys.exit(self.app.exec())
+        sys.exit(self.exec())
 
 if __name__ == '__main__':
     print(sys.argv)
