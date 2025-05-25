@@ -27,9 +27,9 @@ class myDock(QDockWidget):
     def __init__(self, title=None, parent=None):
         if title is None: title = os.getcwd()
         super().__init__(title, parent)
-        self.setFont(QFont('Monospace', 10))
         self.setFloating(False)
         self.setStyleSheet("background-color: #111111;")
+        self.font = parent.font; self.setFont(parent.font)
 
 class FileTree(myDock):
     def __init__(self, title=None, parent=None):
@@ -41,7 +41,8 @@ class FileTree(myDock):
         self.container.setLayout(self.layout)
         #
         self.tree = QTreeView(); self.layout.addWidget(self.tree)
-        self.tree.setFont(QFont('Monospace', 10))
+        self.tree.setFont(self.font)
+        # self.tree.setFont(QFont('Monospace', 10))
         # self.tree.setHeaderHidden(True)
         # self.tree.setAnimated(False)
         self.tree.setIndentation(15)
@@ -55,9 +56,11 @@ class FileTree(myDock):
         #
         self.tree.clicked.connect(self.file_click)
 
+    fileSelected = pyqtSignal(str)
+
     def file_click(self, index):
         path = self.model.filePath(index)
-        print(path)
+        if os.path.isfile(path): self.fileSelected.emit(path)
 
 class CommandLine(QLineEdit):
     def __init__(self, parent=None):
@@ -161,8 +164,11 @@ class MainWindow(QMainWindow):
         self.app = app
         self.setWindowTitle(Info.APP); self.setWindowIcon(app.icon)
         self.showFullScreen()
+        #
+        self.font = QFont('Monospace', 10); self.setFont(self.font)
         self.settings = QSettings(Info.APP, "Theme")
         self._load_theme()
+        #
         self.layout = QHBoxLayout(); self.setLayout(self.layout)
         self.menubar = QMenuBar(); self.setMenuBar(self.menubar)
         self.toolbar = QToolBar("capyBar"); self.addToolBar(self.toolbar)
@@ -181,6 +187,12 @@ class MainWindow(QMainWindow):
     def edit(self):
         self.editor = QTextEdit()
         self.setCentralWidget(self.editor)
+        self.editor.setFont(QFont("Monospace", 10))
+
+    def view(self, filename):
+        assert os.path.isfile(filename)
+        self.editor.setReadOnly(True)
+        self.editor.setStyleSheet("background-color: #111111;")
 
     def shell(self):
         self.locals = {
@@ -196,6 +208,7 @@ class MainWindow(QMainWindow):
     def filetree(self):
         self.files = FileTree(None, self)
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.files)
+        self.files.fileSelected.connect(self.view)
 
     def menu(self):
         self.menu_file()
