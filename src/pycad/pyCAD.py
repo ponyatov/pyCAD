@@ -21,12 +21,43 @@ from PyQt6.QtWidgets import QMainWindow, QMessageBox
 from PyQt6.QtCore import QStandardPaths, QSettings, Qt
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
+import code, traceback
 
 class PythonShell(QDockWidget):
     def __init__(self, title="Python Console", parent=None, locals=None):
         super().__init__(title, parent)
         self.locals = locals or {}
         self.ui()
+        self.console = code.InteractiveConsole(locals)
+
+    def repl(self):
+        cmd = self.input.text()
+        self.input.clear()
+        self.write(f'>> {cmd}')
+
+        # Redirect output
+        old_stdout = sys.stdout
+        old_stderr = sys.stderr
+        sys.stdout = self
+        sys.stderr = self
+
+        try:
+            more = self.console.push(cmd)
+            prompt = "... " if more else ""
+        except SystemExit:
+            self.write("Cannot exit from embedded console\n")
+            prompt = ""
+        except:
+            traceback.print_exc()
+            prompt = ""
+        finally:
+            sys.stdout = old_stdout
+            sys.stderr = old_stderr
+
+        self.write(prompt)
+
+    def write(self, text):
+        self.output.append(text)
 
     def ui(self):
         self.container = QWidget()
@@ -43,7 +74,7 @@ class PythonShell(QDockWidget):
         self.input.setFont(QFont("Monospace", 10))
         self.input.setStyleSheet("background-color: #111111; color: #77FFFF;")
         self.layout.addWidget(self.input)
-        self.input.returnPressed.connect(self.runcmd)
+        self.input.returnPressed.connect(self.repl)
         self.input.setFocus()
 
     def output(self):
@@ -52,10 +83,6 @@ class PythonShell(QDockWidget):
         self.output.setStyleSheet(
             "background-color: #111111; color: lightgreen;")
         self.layout.addWidget(self.output)
-
-    def runcmd(self):
-        self.output.append(self.input.text())
-        self.input.clear()
 
 
 class MainWindow(QMainWindow):
@@ -86,11 +113,13 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.editor)
 
     def shell(self):
-        self.shell = PythonShell(os.getcwd(), self)
+        self.shell = PythonShell(os.getcwd(), self, {
+            'app': self.app,
+            'win': self,
+            'os': os,
+            'sys': sys
+        })
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.shell)
-        # # output
-        # # input
-        # # size
 
     def filetree(self):
         self.files = QDockWidget(os.getcwd(), self)
