@@ -23,6 +23,12 @@ from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import code, traceback
 
+
+class JsonHighlighter(QSyntaxHighlighter): pass
+class KiCadHighlighter(QSyntaxHighlighter): pass
+
+import py, xxx
+
 class myDock(QDockWidget):
     def __init__(self, title=None, parent=None):
         if title is None: title = os.getcwd()
@@ -188,7 +194,7 @@ class MainWindow(QMainWindow):
         self.editor = QTextEdit()
         self.setCentralWidget(self.editor)
         self.editor.setFont(QFont("Monospace", 10))
-        self.view('tmp/xxx')
+        self.view(sys.argv[0])
 
     def view(self, filename):
         assert os.path.isfile(filename)
@@ -200,6 +206,17 @@ class MainWindow(QMainWindow):
         content = stream.readAll()
         file.close()
         self.editor.setPlainText(content)
+        self.syntax(filename)
+
+    def syntax(self, filename):
+        if filename.endswith(('.py', '.pyw')):
+            self.highlighter = py.Highlighter(self.editor.document())
+        elif filename.endswith(('.json',)):
+            self.highlighter = JsonHighlighter(self.editor.document())
+        elif filename.endswith(('.kicad_sch', '.kicad_pcb')):
+            self.highlighter = KiCadHighlighter(self.editor.document())
+        elif filename.endswith(('/xxx',)):
+            self.highlighter = xxx.Highlighter(self.editor.document())
 
     def edit(self, filename):
         self.view(filename)
