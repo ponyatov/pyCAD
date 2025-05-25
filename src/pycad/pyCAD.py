@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
     def menu(self):
         self.file()
         self.sch()
-        self.sim()
+        self.spice()
         self.pcb()
         self.lib()
         self.option()
@@ -57,17 +57,17 @@ class MainWindow(QMainWindow):
         self.menubar.sch = QMenu('&Sch', self)
         self.menubar.addMenu(self.menubar.sch)
 
-    def sim(self):
-        self.menubar.sim = QMenu('S&im', self)
-        self.menubar.addMenu(self.menubar.sim)
-        self.menubar.sim.op = QAction('&OP', self)
-        self.menubar.sim.addAction(self.menubar.sim.op)
-        self.menubar.sim.tran = QAction('&TRAN', self)
-        self.menubar.sim.addAction(self.menubar.sim.tran)
-        self.menubar.sim.ac = QAction('&AC', self)
-        self.menubar.sim.addAction(self.menubar.sim.ac)
-        self.menubar.sim.dc = QAction('&DC', self)
-        self.menubar.sim.addAction(self.menubar.sim.dc)
+    def spice(self):
+        self.menubar.spice = QMenu('SP&ICE', self)
+        self.menubar.addMenu(self.menubar.spice)
+        self.menubar.spice.op = QAction('&OP', self)
+        self.menubar.spice.addAction(self.menubar.spice.op)
+        self.menubar.spice.tran = QAction('&TRAN', self)
+        self.menubar.spice.addAction(self.menubar.spice.tran)
+        self.menubar.spice.ac = QAction('&AC', self)
+        self.menubar.spice.addAction(self.menubar.spice.ac)
+        self.menubar.spice.dc = QAction('&DC', self)
+        self.menubar.spice.addAction(self.menubar.spice.dc)
 
     def pcb(self):
         self.menubar.pcb = QMenu('&PCB', self)
@@ -76,6 +76,14 @@ class MainWindow(QMainWindow):
     def lib(self):
         self.menubar.lib = QMenu('&Lib', self)
         self.menubar.addMenu(self.menubar.lib)
+        self.menubar.lib.sym = QAction('&Sym')
+        self.menubar.lib.addAction(self.menubar.lib.sym)
+        self.menubar.lib.model = QAction('&Model')
+        self.menubar.lib.addAction(self.menubar.lib.Modell)
+        self.menubar.lib.pin = QAction('&Pin')
+        self.menubar.lib.addAction(self.menubar.lib.pin)
+        self.menubar.lib.pad = QAction('&Pad')
+        self.menubar.lib.addAction(self.menubar.lib.pad)
 
     def option(self):
         self.menubar.option = QMenu('&Option', self)
