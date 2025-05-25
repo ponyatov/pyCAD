@@ -18,10 +18,34 @@ import sys
 
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QMainWindow, QMessageBox
-from PyQt6.QtCore import QStandardPaths, QSettings, Qt
+from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import code, traceback
+
+
+class CommandLine(QLineEdit):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setPlaceholderText(">>")
+        self.setFont(QFont("Monospace", 10))
+        self.setStyleSheet("background-color: #111111; color: #77FFFF;")
+        #
+        self.locals = parent.locals
+        self.history = {}
+        #
+        self.completer = QCompleter(self.locals.keys())
+        self.setCompleter(self.completer)
+        self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+        self.completer.setFilterMode(Qt.MatchFlag.MatchContains)
+        self.completer.setCompletionMode(
+            QCompleter.CompletionMode.PopupCompletion)
+
+    def update(self, cmd):
+        if cmd not in self.locals.keys():
+            self.history[cmd] = None
+        self.completer.model().setStringList(
+            list(self.locals.keys()) + list(self.history.keys()))
 
 class PythonShell(QDockWidget):
     def __init__(self, title="Python Console", parent=None, locals=None):
@@ -30,10 +54,22 @@ class PythonShell(QDockWidget):
         self.ui()
         self.console = code.InteractiveConsole(locals)
 
+    def eventFilter(self, obj, event):
+        match event.type():
+            case QEvent.Type.KeyPress:
+                match event.key():
+                    case Qt.Key.Key_Up:
+                        self.history_nav(-1); return True
+                    case Qt.Key.Key_Down:
+                        self.history_nav(+1); return True
+        return super().eventFilter(obj, event)
+
     def repl(self):
         cmd = self.input.text()
-        self.input.clear()
-        self.write(f'>> {cmd}')
+        if cmd:
+            self.input.update(cmd)
+            self.input.clear()
+            self.write(f'>> {cmd}')
 
         # Redirect output
         old_stdout = sys.stdout
@@ -70,15 +106,14 @@ class PythonShell(QDockWidget):
         self.input()
 
     def input(self):
-        self.input = QLineEdit()
-        self.input.setFont(QFont("Monospace", 10))
-        self.input.setStyleSheet("background-color: #111111; color: #77FFFF;")
+        print(self.locals)
+        self.input = CommandLine(self)
         self.layout.addWidget(self.input)
         self.input.returnPressed.connect(self.repl)
         self.input.setFocus()
 
     def output(self):
-        self.output = QTextEdit()
+        self.output = QTextEdit(self.container)
         self.output.setFont(QFont("Monospace", 10))
         self.output.setStyleSheet(
             "background-color: #111111; color: lightgreen;")
@@ -113,12 +148,14 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.editor)
 
     def shell(self):
-        self.shell = PythonShell(os.getcwd(), self, {
+        self.locals = {
             'app': self.app,
             'win': self,
             'os': os,
-            'sys': sys
-        })
+            'sys': sys,
+            'files': self.files
+        }
+        self.shell = PythonShell(os.getcwd(), self, self.locals)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.shell)
 
     def filetree(self):
