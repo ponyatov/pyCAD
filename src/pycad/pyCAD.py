@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.app = app
         self.setWindowTitle(Info.APP); self.setWindowIcon(app.icon)
-        # self.showFullScreen()
+        self.showFullScreen()
         self.settings = QSettings(Info.APP, "Theme")
         self._load_theme()
         self.layout = QHBoxLayout(); self.setLayout(self.layout)
@@ -61,13 +61,16 @@ class MainWindow(QMainWindow):
         # output
         self.shell.output = QTextEdit()
         self.shell.output.setFont(QFont("Monospace", 10))
+        self.shell.output.setStyleSheet("background-color: #111111; color: lightgreen;")
         self.shell.layout.addWidget(self.shell.output)
         # input
         self.shell.input = QLineEdit()
         self.shell.input.setFont(QFont("Monospace", 10))
+        self.shell.input.setStyleSheet("background-color: #111111; color: #77FFFF;")
         self.shell.layout.addWidget(self.shell.input)
         # size
         self.shell.setMinimumHeight(100)
+        self.shell.input.setFocus()
 
     def filetree(self):
         self.files = QDockWidget(os.getcwd(), self)
@@ -81,7 +84,7 @@ class MainWindow(QMainWindow):
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.files)
 
     def menu(self):
-        self.file()
+        self.menu_file()
         self.sch()
         self.cir()
         self.pcb()
@@ -91,11 +94,11 @@ class MainWindow(QMainWindow):
         self.option()
         self.help()
 
-    def file(self):
+    def menu_file(self):
         self.menubar.file = QMenu('&File', self)
         self.menubar.file.setStatusTip("open/import/export")
         self.menubar.addMenu(self.menubar.file)
-        self.menubar.file.exit = QAction("E&xit\tCtrl+Q", self)
+        self.menubar.file.exit = QAction("E&xit\tAlt+Q", self)
         self.menubar.file.addAction(self.menubar.file.exit)
         self.menubar.file.exit.triggered.connect(self.close)
 
