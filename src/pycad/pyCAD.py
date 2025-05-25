@@ -52,6 +52,12 @@ class FileTree(myDock):
         self.model.setRootPath(QDir.currentPath())
         self.tree.setModel(self.model)
         self.tree.setRootIndex(self.model.index(QDir.currentPath()))
+        #
+        self.tree.clicked.connect(self.file_click)
+
+    def file_click(self, index):
+        path = self.model.filePath(index)
+        print(path)
 
 class CommandLine(QLineEdit):
     def __init__(self, parent=None):
@@ -136,7 +142,6 @@ class PythonShell(QDockWidget):
         self.input()
 
     def input(self):
-        print(self.locals)
         self.input = CommandLine(self)
         self.layout.addWidget(self.input)
         self.input.returnPressed.connect(self.repl)
@@ -308,7 +313,6 @@ class pyCAD(QApplication):
             # QStandardPaths.StandardLocation.GenericConfigLocation)
         )
         self.etc = f'{self.home}/pyCAD/etc'
-        print(self.etc)
 
     def theme(self):
         # force qt6ct as platform theme
