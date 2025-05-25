@@ -1,21 +1,26 @@
 from PyQt6.QtGui import QSyntaxHighlighter, QTextCharFormat, QColor, QFont
 from PyQt6.QtCore import QRegularExpression
 
+import syntax
+
 class Highlighter(QSyntaxHighlighter):
     def __init__(self, document):
         super().__init__(document)
-        keywords = ['as']
+
         self.rules = []
 
-        keyword_format = QTextCharFormat()
-        keyword_format.setForeground(QColor("#569CD6"))
-        keyword_format.setFontWeight(QFont.Weight.Bold)
-        for word in keywords:
-            self.rules.append((fr'\b{word}\b', keyword_format))
+        syntax.LineComment(self.rules,r'#[^\r\n]*')
+        syntax.Keyword(self.rules,[
+            'and', 'as', 'assert', 'break', 'class', 'continue',
+            'def', 'del', 'elif', 'else', 'except', 'False',
+            'finally', 'for', 'from', 'global', 'if', 'import',
+            'in', 'is', 'lambda', 'None', 'nonlocal', 'not',
+            'or', 'pass', 'raise', 'return', 'True', 'try',
+            'while', 'with', 'yield'
+        ])
 
-        number_format = QTextCharFormat()
-        number_format.setForeground(QColor("#6A9955"))
-        self.rules.append((r'\d+', number_format))
+        syntax.Number(self.rules)
+        syntax.String(self.rules)
 
     def highlightBlock(self, text):
         for pattern, fmt in self.rules:
@@ -23,4 +28,5 @@ class Highlighter(QSyntaxHighlighter):
             match_iterator = expression.globalMatch(text)
             while match_iterator.hasNext():
                 found = match_iterator.next()
-                self.setFormat(found.capturedStart(), found.capturedLength(), fmt)
+                self.setFormat(found.capturedStart(),
+                               found.capturedLength(), fmt)
