@@ -6,8 +6,6 @@ class Highlighter(syntax.Highlighter):
     def __init__(self, document):
         super().__init__(document)
 
-        syntax.Number(self.rules)
-        syntax.LineComment(self.rules, r'#[^\r\n]*')
         syntax.Keyword(self.rules, [
             'and', 'as', 'assert', 'break', 'class', 'continue',
             'def', 'del', 'elif', 'else', 'except', 'False',
@@ -20,4 +18,6 @@ class Highlighter(syntax.Highlighter):
             '__name__', 'self', '__init__', 'os', 'sys', 'print'
         ])
 
+        syntax.Number(self.rules)
         syntax.String(self.rules)
+        syntax.LineComment(self.rules, r'#[^\r\n]*')
