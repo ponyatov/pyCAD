@@ -7,6 +7,7 @@ APP = 'pyCAD'
 ABOUT = '2D CAD for Electronics Design'
 AUTHOR = 'Dmitry Ponyatov'
 EMAIL = 'dponyatov@gmail.com'
+TGRAM = '@dponyatov'
 LICENSE = 'MIT'
 
 import os
@@ -16,14 +17,59 @@ import sys
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.QtCore import QStandardPaths, QSettings
-from PyQt6.QtGui import QPalette, QColor
+from PyQt6.QtGui import QPalette, QColor, QKeySequence, QAction
+from PyQt6.QtWidgets import QMenuBar, QMenu, QToolBar
 
 class MainWindow(QMainWindow):
     def __init__(self, app):
         super().__init__()
+        self.setWindowTitle(APP)
         self.app = app
         self.settings = QSettings(APP, "Theme")
         self._load_theme()
+        self.menubar = QMenuBar()
+        self.setMenuBar(self.menubar)
+        self.toolbar = QToolBar("capyBar")
+        self.addToolBar(self.toolbar)
+        self.menu()
+
+    def menu(self):
+        self.file()
+        self.sch()
+        self.sym()
+        self.pcb()
+        self.lib()
+        self.option()
+        self.help()
+
+    def file(self):
+        self.menubar.file = QMenu('&File', self)
+        self.menubar.addMenu(self.menubar.file)
+        self.menubar.file.exit = QAction("E&xit", self)
+
+    def sch(self):
+        self.menubar.sch = QMenu('&Sch', self)
+        self.menubar.addMenu(self.menubar.sch)
+
+    def sym(self):
+        self.menubar.sym = QMenu('Sy&m', self)
+        self.menubar.addMenu(self.menubar.sym)
+
+    def pcb(self):
+        self.menubar.pcb = QMenu('&PCB', self)
+        self.menubar.addMenu(self.menubar.pcb)
+
+    def lib(self):
+        self.menubar.lib = QMenu('&Lib', self)
+        self.menubar.addMenu(self.menubar.lib)
+
+    def option(self):
+        self.menubar.option = QMenu('&Option', self)
+        self.menubar.addMenu(self.menubar.option)
+
+    def help(self):
+        self.menubar.help = QMenu('&Help', self)
+        self.menubar.addMenu(self.menubar.help)
 
     def _load_theme(self):
         self.style = self.settings.value("style", "Fusion")
