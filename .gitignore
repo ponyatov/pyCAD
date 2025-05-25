@@ -1,5 +1,10 @@
 *~
 *.swp
-*.log
 *.pyc
+*.log
+/target/
+lib64
+lib/python*
+bin/pip*
+bin/python*
 !.gitignore
