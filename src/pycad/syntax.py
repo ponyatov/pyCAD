@@ -6,6 +6,7 @@ class Lexer:
     tokens = [
         'KEYWORD',
         'NUMBER',
+        'BOOL',
         'STRING',
         'COMMENT',
         'OPERATOR',
@@ -17,6 +18,7 @@ class Lexer:
     t_ignore = ' \t'
 
     t_NUMBER = r'\b[+\-]?\d+(\.\d+)?\b'
+    t_BOOL = r'\b([tT]rue|[fF]alse)\b'
     t_OPERATOR = r'[+\-*/%=&|<>!^~]'
     t_PAREN = r'[\(\)\[\]\{\}]'
 
@@ -52,6 +54,7 @@ class Highlighter(QSyntaxHighlighter):
         match tok_type:
             case 'KEYWORD': return KEYWORD
             case 'NUMBER': return NUMBER
+            case 'BOOL': return BOOL
             case 'STRING': return STRING
             case 'COMMENT': return COMMENT
             case 'OPERATOR': return OPERATOR
