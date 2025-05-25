@@ -24,7 +24,7 @@ classifiers = [
 ]
 
 requires-python = ">= 3.11"
-dependencies = ["PyQt6 >= 6.4", "ply >= 3.11"]
+dependencies = ["ply >= 3.11"]
 
 [project.urls]
 Homepage = "https://github.com/ponyatov/pyCAD"
@@ -32,6 +32,10 @@ Source = "https://github.com/ponyatov/pyCAD/tree/seek"
 Issues = "https://github.com/ponyatov/pyCAD/issues"
 
 [project.optional-dependencies]
+gui = [
+    "PyQt6 >= 6.4", # need full-sized GUI for CAD with complex interface
+    # "qt6ct",        # using dark system color theme
+]
 dev = [
     "autopep8 >= 2.0.1",
     # "pytest>=7.0",
