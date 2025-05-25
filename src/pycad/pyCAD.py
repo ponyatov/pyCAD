@@ -14,14 +14,12 @@ class Info:
 
 import os
 import sys
-
-from PyQt6.QtWidgets import QApplication
-from PyQt6.QtWidgets import QMainWindow, QMessageBox
-from PyQt6.QtCore import *
-from PyQt6.QtGui import *
-from PyQt6.QtWidgets import *
 import code, traceback
 
+from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
+from PyQt6.QtWidgets import *
+from PyQt6.QtCore import *
+from PyQt6.QtGui import *
 
 class JsonHighlighter(QSyntaxHighlighter): pass
 class KiCadHighlighter(QSyntaxHighlighter): pass
@@ -35,6 +33,8 @@ class myDock(QDockWidget):
         self.setFloating(False)
         self.setStyleSheet("background-color: #111111;")
         self.font = parent.font; self.setFont(parent.font)
+
+from file import ColoredFileModel
 
 class FileTree(myDock):
     def __init__(self, title=None, parent=None):
@@ -54,7 +54,7 @@ class FileTree(myDock):
         self.tree.setSortingEnabled(True)
         # self.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         #
-        self.model = QFileSystemModel()
+        self.model = ColoredFileModel()
         self.model.setRootPath(QDir.currentPath())
         self.tree.setModel(self.model)
         self.tree.setRootIndex(self.model.index(QDir.currentPath()))

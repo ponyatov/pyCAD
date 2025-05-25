@@ -1,5 +1,4 @@
-from PyQt6.QtGui import *
-from PyQt6.QtCore import QRegularExpression
+from PyQt6.QtGui import QSyntaxHighlighter
 
 import ply.lex as lex
 
@@ -31,35 +30,7 @@ class Lexer:
     def __init__(self):
         self.lexer = lex.lex(module=self)
 
-class FORMAT(QTextCharFormat):
-    color = "#D4D4D4"
-    weight = QFont.Weight.Normal
-    italic = False
-
-    def __init__(self):
-        super().__init__()
-        self.setForeground(QColor(self.color))
-        self.setFontWeight(self.weight)
-        self.setFontItalic(self.italic)
-
-class KEYWORD(FORMAT):
-    color = "#569CD6"
-class NUMBER(FORMAT):
-    color = "#B5CEA8"
-class STRING(FORMAT):
-    color = "#CE9178"
-class COMMENT(FORMAT):
-    color = "#6A9955"
-    italic = True
-class OPERATOR(FORMAT):
-    color = "#D4D44D"
-class PAREN(FORMAT):
-    color = "#4DD4D4"
-class IDENTIFIER(FORMAT):
-    color = "#569CD6"
-class STDLIB(FORMAT):
-    color = "#D69C56"
-
+from colors import *
 
 class Highlighter(QSyntaxHighlighter):
     def __init__(self, document):
