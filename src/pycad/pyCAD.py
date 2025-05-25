@@ -18,28 +18,53 @@ import sys
 
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QMainWindow, QMessageBox
-from PyQt6.QtCore import QStandardPaths, QSettings
+from PyQt6.QtCore import QStandardPaths, QSettings, Qt
 from PyQt6.QtGui import QPalette, QColor, QKeySequence, QAction, QIcon
-from PyQt6.QtWidgets import QMenuBar, QMenu, QToolBar, QTreeView, QDockWidget
+from PyQt6.QtWidgets import *
 
 class FileBrowser(QDockWidget):
     def __init__(self, parent=None):
         super().__init__("File Browser", parent)
         self.setObjectName("FileBrowser")
+        #
+        self.tree = QTreeView()
+
 
 class MainWindow(QMainWindow):
     def __init__(self, app):
         super().__init__()
         self.app = app
-        self.setWindowTitle(Info.APP)
-        self.setWindowIcon(app.icon)
+        self.setWindowTitle(Info.APP); self.setWindowIcon(app.icon)
         self.settings = QSettings(Info.APP, "Theme")
         self._load_theme()
-        self.menubar = QMenuBar()
-        self.setMenuBar(self.menubar)
-        self.toolbar = QToolBar("capyBar")
-        self.addToolBar(self.toolbar)
+        self.layout = QHBoxLayout(); self.setLayout(self.layout)
+        self.menubar = QMenuBar(); self.setMenuBar(self.menubar)
+        self.toolbar = QToolBar("capyBar"); self.addToolBar(self.toolbar)
         self.menu()
+        self.status()
+        self.edit()
+        self.file()
+
+    def status(self):
+        self.statusbar = QStatusBar()
+        self.setStatusBar(self.statusbar)
+        self.statusbar.hello = QLabel(f"{Info.APP} {Info.VERSION}")
+        self.statusbar.addPermanentWidget(self.statusbar.hello)
+
+    def edit(self):
+        self.editor = QTextEdit()
+        self.setCentralWidget(self.editor)
+
+    def file(self):
+        self.files = QDockWidget('Files', self)
+        self.files.tree = QListWidget()
+        self.files.tree.addItem('Item1')
+        self.files.tree.addItem('Item2')
+        self.files.tree.addItem('Item3')
+        self.files.tree.addItem('Item4')
+        self.files.setWidget(self.files.tree)
+        self.files.setFloating(False)
+        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.files)
 
     def menu(self):
         self.file()
