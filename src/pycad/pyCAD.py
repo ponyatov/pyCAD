@@ -3,29 +3,32 @@
 # Copyright (C) 2023-2024 Dmitry Ponyatov <dponyatov@gmail.com>
 # MIT License
 
-APP = 'pyCAD'
-ABOUT = '2D CAD for Electronics Design'
-AUTHOR = 'Dmitry Ponyatov'
-EMAIL = 'dponyatov@gmail.com'
-TGRAM = '@dponyatov'
-LICENSE = 'MIT'
+class Info:
+    APP = 'pyCAD'
+    ABOUT = '2D CAD for Electronics Design'
+    AUTHOR = 'Dmitry Ponyatov'
+    EMAIL = 'dponyatov@gmail.com'
+    TGRAM = '@dponyatov'
+    LICENSE = 'MIT'
+    VERSION = '0.0.1'
 
 import os
 import sys
 
 
 from PyQt6.QtWidgets import QApplication
-from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtWidgets import QMainWindow, QMessageBox
 from PyQt6.QtCore import QStandardPaths, QSettings
-from PyQt6.QtGui import QPalette, QColor, QKeySequence, QAction
+from PyQt6.QtGui import QPalette, QColor, QKeySequence, QAction, QIcon
 from PyQt6.QtWidgets import QMenuBar, QMenu, QToolBar
 
 class MainWindow(QMainWindow):
     def __init__(self, app):
         super().__init__()
-        self.setWindowTitle(APP)
         self.app = app
-        self.settings = QSettings(APP, "Theme")
+        self.setWindowTitle(Info.APP)
+        self.setWindowIcon(app.icon)
+        self.settings = QSettings(Info.APP, "Theme")
         self._load_theme()
         self.menubar = QMenuBar()
         self.setMenuBar(self.menubar)
@@ -36,7 +39,7 @@ class MainWindow(QMainWindow):
     def menu(self):
         self.file()
         self.sch()
-        self.sym()
+        self.sim()
         self.pcb()
         self.lib()
         self.option()
@@ -54,9 +57,9 @@ class MainWindow(QMainWindow):
         self.menubar.sch = QMenu('&Sch', self)
         self.menubar.addMenu(self.menubar.sch)
 
-    def sym(self):
-        self.menubar.sym = QMenu('Sy&m', self)
-        self.menubar.addMenu(self.menubar.sym)
+    def sim(self):
+        self.menubar.sim = QMenu('S&im', self)
+        self.menubar.addMenu(self.menubar.sim)
 
     def pcb(self):
         self.menubar.pcb = QMenu('&PCB', self)
@@ -78,7 +81,11 @@ class MainWindow(QMainWindow):
         self.menubar.help.about.triggered.connect(self.about)
 
     def about(self):
-        print(self)
+        QMessageBox.about(self, f"About {Info.APP}", f"""
+{Info.APP} {Info.VERSION}
+{Info.ABOUT}
+
+(c) {Info.AUTHOR} <{Info.EMAIL}> MIT""")
 
     def _load_theme(self):
         self.style = self.settings.value("style", "Fusion")
@@ -95,6 +102,7 @@ class MainWindow(QMainWindow):
 class pyCAD(QApplication):
     def __init__(self):
         QApplication.__init__(self, sys.argv)
+        self.icon = QIcon('doc/logo.png')
         self.win = MainWindow(self)
         self.setQuitOnLastWindowClosed(True)
         self.config()
