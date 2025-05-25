@@ -22,6 +22,41 @@ from PyQt6.QtCore import QStandardPaths, QSettings, Qt
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
+class PythonShell(QDockWidget):
+    def __init__(self, title="Python Console", parent=None, locals=None):
+        super().__init__(title, parent)
+        self.locals = locals or {}
+        self.ui()
+
+    def ui(self):
+        self.container = QWidget()
+        self.setWidget(self.container)
+        self.layout = QVBoxLayout()
+        self.container.setLayout(self.layout)
+        self.layout.setContentsMargins(0, 0, 0, 0)
+        self.setMinimumHeight(100)
+        self.output()
+        self.input()
+
+    def input(self):
+        self.input = QLineEdit()
+        self.input.setFont(QFont("Monospace", 10))
+        self.input.setStyleSheet("background-color: #111111; color: #77FFFF;")
+        self.layout.addWidget(self.input)
+        self.input.returnPressed.connect(self.runcmd)
+        self.input.setFocus()
+
+    def output(self):
+        self.output = QTextEdit()
+        self.output.setFont(QFont("Monospace", 10))
+        self.output.setStyleSheet(
+            "background-color: #111111; color: lightgreen;")
+        self.layout.addWidget(self.output)
+
+    def runcmd(self):
+        self.output.append(self.input.text())
+        self.input.clear()
+
 
 class MainWindow(QMainWindow):
     def __init__(self, app):
@@ -51,26 +86,11 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.editor)
 
     def shell(self):
-        self.shell = QDockWidget(os.getcwd(), self)
+        self.shell = PythonShell(os.getcwd(), self)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.shell)
-        self.shell.container = QWidget()
-        self.shell.setWidget(self.shell.container)
-        self.shell.layout = QVBoxLayout()
-        self.shell.container.setLayout(self.shell.layout)
-        self.shell.layout.setContentsMargins(0, 0, 0, 0)
-        # output
-        self.shell.output = QTextEdit()
-        self.shell.output.setFont(QFont("Monospace", 10))
-        self.shell.output.setStyleSheet("background-color: #111111; color: lightgreen;")
-        self.shell.layout.addWidget(self.shell.output)
-        # input
-        self.shell.input = QLineEdit()
-        self.shell.input.setFont(QFont("Monospace", 10))
-        self.shell.input.setStyleSheet("background-color: #111111; color: #77FFFF;")
-        self.shell.layout.addWidget(self.shell.input)
-        # size
-        self.shell.setMinimumHeight(100)
-        self.shell.input.setFocus()
+        # # output
+        # # input
+        # # size
 
     def filetree(self):
         self.files = QDockWidget(os.getcwd(), self)
