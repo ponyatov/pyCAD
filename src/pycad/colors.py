@@ -32,6 +32,7 @@ class PCB(FORMAT): color = '#9CDCFE'
 # code
 class LEX(FORMAT): color = '#D77DBA'
 class CPP(FORMAT): color = '#BAD77D'
+class RUST(FORMAT): color = '#F74C00'
 class PY(FORMAT): color = '#D7BA7D'
 class JSON(FORMAT): color = '#CE9178'
 class MK(FORMAT): color = '#2468AC'

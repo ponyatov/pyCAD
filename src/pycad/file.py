@@ -19,7 +19,7 @@ class ColoredFileModel(QFileSystemModel):
             if file_info.isDir():
                 return QBrush(QColor(colors.DIR.color))
 
-            def info2color(file_info):
+            def filename2color(file_info):
                 match RegexMatch(file_info.fileName()):
                     case r'LICENSE|xxx': return colors.TXT
                     case r'Makefile': return colors.MK
@@ -36,6 +36,6 @@ class ColoredFileModel(QFileSystemModel):
                     case 'cmake': return colors.CMAKE
                 return colors.FORMAT
 
-            return QBrush(QColor(info2color(file_info).color))
+            return QBrush(QColor(filename2color(file_info).color))
 
         return super().data(index, role)
