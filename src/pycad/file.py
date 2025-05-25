@@ -13,29 +13,30 @@ class ColoredFileModel(QFileSystemModel):
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
 
-        if role == Qt.ItemDataRole.ForegroundRole:
-            file_info = QFileInfo(self.filePath(index))
+        if role != Qt.ItemDataRole.ForegroundRole:
+            return super().data(index, role)
 
-            if file_info.isDir():
-                return QBrush(QColor(colors.DIR.color))
+        file_info = QFileInfo(self.filePath(index))
 
-            def filename2color(file_info):
-                match RegexMatch(file_info.fileName()):
-                    case r'LICENSE|xxx': return colors.TXT
-                    case r'Makefile': return colors.MK
-                    case r'CMake.+': return colors.CMAKE
-                match file_info.suffix().lower():
-                    case 'lex': return colors.LEX
-                    case 'yacc': return colors.LEX
-                    case 'c': return colors.CPP
-                    case 'cpp': return colors.CPP
-                    case 'py': return colors.PY
-                    case 'md': return colors.MD
-                    case 'txt': return colors.TXT
-                    case 'mk': return colors.MK
-                    case 'cmake': return colors.CMAKE
-                return colors.FORMAT
+        if file_info.isDir():
+            return QBrush(QColor(colors.DIR.color))
 
-            return QBrush(QColor(filename2color(file_info).color))
+        def filename2color(file_info):
+            match RegexMatch(file_info.fileName()):
+                case r'LICENSE|xxx': return colors.TXT
+                case r'Makefile': return colors.MK
+                case r'CMake.+': return colors.CMAKE
+                case r'pyvenv.cfg|requirements.txt|pyproject.toml': return colors.PY
+            match file_info.suffix().lower():
+                case 'lex': return colors.LEX
+                case 'yacc': return colors.LEX
+                case 'c': return colors.CPP
+                case 'cpp': return colors.CPP
+                case 'py': return colors.PY
+                case 'md': return colors.MD
+                case 'txt': return colors.TXT
+                case 'mk': return colors.MK
+                case 'cmake': return colors.CMAKE
+            return colors.FORMAT
 
-        return super().data(index, role)
+        return QBrush(QColor(filename2color(file_info).color))

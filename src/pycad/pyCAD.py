@@ -51,7 +51,7 @@ class FileTree(myDock):
         # self.tree.setHeaderHidden(True)
         # self.tree.setAnimated(False)
         self.tree.setIndentation(15)
-        self.tree.setSortingEnabled(True)
+        # self.tree.setSortingEnabled(True)
         # self.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         #
         self.model = ColoredFileModel()
