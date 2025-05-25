@@ -1,0 +1,8 @@
+[project]
+name = "pycad"
+description = "2D CAD for Electronics Design /Python/"
+authors = ["Dmitry Ponyatov <dponyatov@gmail.com>", "DeepSeek Chat"]
+dynamic = ["version"]
+
+[build-system]
+requires = ["PyQt6 => 6.4.2", "ply >= 3.11"]
