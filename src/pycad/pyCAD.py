@@ -44,8 +44,11 @@ class MainWindow(QMainWindow):
 
     def file(self):
         self.menubar.file = QMenu('&File', self)
+        self.menubar.file.setStatusTip("open/import/export")
         self.menubar.addMenu(self.menubar.file)
-        self.menubar.file.exit = QAction("E&xit", self)
+        self.menubar.file.exit = QAction("E&xit\tCtrl+Q", self)
+        self.menubar.file.addAction(self.menubar.file.exit)
+        self.menubar.file.exit.triggered.connect(self.close)
 
     def sch(self):
         self.menubar.sch = QMenu('&Sch', self)
@@ -70,6 +73,8 @@ class MainWindow(QMainWindow):
     def help(self):
         self.menubar.help = QMenu('&Help', self)
         self.menubar.addMenu(self.menubar.help)
+        self.menubar.help.about = QAction("&About\tF1", self)
+        self.menubar.help.addAction(self.menubar.help.about)
 
     def _load_theme(self):
         self.style = self.settings.value("style", "Fusion")
