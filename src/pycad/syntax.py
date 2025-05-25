@@ -32,33 +32,33 @@ class Lexer:
         self.lexer = lex.lex(module=self)
 
 class FORMAT(QTextCharFormat):
-    color = QColor("#D4D4D4")
+    color = "#D4D4D4"
     weight = QFont.Weight.Normal
     italic = False
 
     def __init__(self):
         super().__init__()
-        self.setForeground(self.color)
+        self.setForeground(QColor(self.color))
         self.setFontWeight(self.weight)
         self.setFontItalic(self.italic)
 
 class KEYWORD(FORMAT):
-    color = QColor("#569CD6")
+    color = "#569CD6"
 class NUMBER(FORMAT):
-    color = QColor("#B5CEA8")
+    color = "#B5CEA8"
 class STRING(FORMAT):
-    color = QColor("#CE9178")
+    color = "#CE9178"
 class COMMENT(FORMAT):
-    color = QColor("#6A9955")
+    color = "#6A9955"
     italic = True
 class OPERATOR(FORMAT):
-    color = QColor("#D4D44D")
+    color = "#D4D44D"
 class PAREN(FORMAT):
-    color = QColor("#4DD4D4")
+    color = "#4DD4D4"
 class IDENTIFIER(FORMAT):
-    color = QColor("#569CD6")
+    color = "#569CD6"
 class STDLIB(FORMAT):
-    color = QColor("#D69C56")
+    color = "#D69C56"
 
 
 class Highlighter(QSyntaxHighlighter):
