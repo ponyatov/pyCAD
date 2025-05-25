@@ -23,6 +23,35 @@ from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import code, traceback
 
+class myDock(QDockWidget):
+    def __init__(self, title=None, parent=None):
+        if title is None: title = os.getcwd()
+        super().__init__(title, parent)
+        self.setFont(QFont('Monospace', 10))
+        self.setFloating(False)
+        self.setStyleSheet("background-color: #111111;")
+
+class FileTree(myDock):
+    def __init__(self, title=None, parent=None):
+        super().__init__(title, parent)
+        self.setMinimumWidth(555)
+        #
+        self.container = QWidget(); self.setWidget(self.container)
+        self.layout = QVBoxLayout()
+        self.container.setLayout(self.layout)
+        #
+        self.tree = QTreeView(); self.layout.addWidget(self.tree)
+        self.tree.setFont(QFont('Monospace', 10))
+        # self.tree.setHeaderHidden(True)
+        # self.tree.setAnimated(False)
+        self.tree.setIndentation(15)
+        self.tree.setSortingEnabled(True)
+        # self.tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        #
+        self.model = QFileSystemModel()
+        self.model.setRootPath(QDir.currentPath())
+        self.tree.setModel(self.model)
+        self.tree.setRootIndex(self.model.index(QDir.currentPath()))
 
 class CommandLine(QLineEdit):
     def __init__(self, parent=None):
@@ -50,6 +79,7 @@ class CommandLine(QLineEdit):
 class PythonShell(QDockWidget):
     def __init__(self, title="Python Console", parent=None, locals=None):
         super().__init__(title, parent)
+        self.setFloating(False)
         self.locals = locals or {}
         self.ui()
         self.console = code.InteractiveConsole(locals)
@@ -159,14 +189,7 @@ class MainWindow(QMainWindow):
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.shell)
 
     def filetree(self):
-        self.files = QDockWidget(os.getcwd(), self)
-        self.files.tree = QListWidget()
-        # self.files.tree.addItem('Item1')
-        # self.files.tree.addItem('Item2')
-        # self.files.tree.addItem('Item3')
-        # self.files.tree.addItem('Item4')
-        self.files.setWidget(self.files.tree)
-        # self.files.setFloating(False)
+        self.files = FileTree(None, self)
         self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.files)
 
     def menu(self):
