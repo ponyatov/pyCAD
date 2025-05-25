@@ -194,7 +194,8 @@ class MainWindow(QMainWindow):
         self.editor = QTextEdit()
         self.setCentralWidget(self.editor)
         self.editor.setFont(QFont("Monospace", 10))
-        self.view(sys.argv[0])
+        # self.view(sys.argv[0])
+        self.view('tmp/xxx')
 
     def view(self, filename):
         assert os.path.isfile(filename)

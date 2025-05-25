@@ -1,4 +1,19 @@
 from PyQt6.QtGui import *
+from PyQt6.QtCore import QRegularExpression
+
+class Highlighter(QSyntaxHighlighter):
+    def __init__(self, document):
+        super().__init__(document)
+        self.rules = []
+
+    def highlightBlock(self, text):
+        for pattern, fmt in self.rules:
+            expression = QRegularExpression(pattern)
+            match_iterator = expression.globalMatch(text)
+            while match_iterator.hasNext():
+                found = match_iterator.next()
+                self.setFormat(found.capturedStart(),
+                               found.capturedLength(), fmt)
 
 class AST(QTextCharFormat):
     weight = QFont.Weight.Normal
@@ -29,7 +44,20 @@ class Keyword(AST):
             rules.append((fr'\b{word}\b', self))
 
 class LineComment(AST):
-    color = QColor("#444444")
+    color = QColor("#667733")
 
 class String(AST):
-    pass
+    color = QColor('#CE9178')
+
+    def __init__(self, rules, keywords=[]):
+        super().__init__(rules)
+        rules.append((r'\".*?\"', self))
+        rules.append((r'\'.*?\'', self))
+
+class StdLib(AST):
+    color = QColor("#56D69C")
+
+    def __init__(self, rules, names=[]):
+        super().__init__(rules)
+        for name in names:
+            rules.append((fr'\b{name}\b', self))
