@@ -37,10 +37,10 @@
         {
             "label"          : "python: run",
             "type"           : "shell",
-            "command"        : "bin/python3 src/${workspaceFolderBasename}.py lib/${workspaceFolderBasename}.ini",
+            "command"        : "bin/python3 src/pycad/${workspaceFolderBasename}.py lib/${workspaceFolderBasename}.ini",
             "problemMatcher" : [],
-            "presentation"   : {"showReuseMessage": false, "focus": false, "reveal": "silent"},
-            "group"          : {"kind": "build","isDefault": true}
+            "presentation"   : {"showReuseMessage": false, "focus": true, "reveal": "silent"},
+            "group"          : {"kind": "build", "isDefault": true}
         }
     ]
 }
