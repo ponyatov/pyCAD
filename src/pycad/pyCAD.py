@@ -60,6 +60,14 @@ class MainWindow(QMainWindow):
     def sim(self):
         self.menubar.sim = QMenu('S&im', self)
         self.menubar.addMenu(self.menubar.sim)
+        self.menubar.sim.dc = QAction('&DC', self)
+        self.menubar.sim.addAction(self.menubar.sim.dc)
+        self.menubar.sim.ac = QAction('&AC', self)
+        self.menubar.sim.addAction(self.menubar.sim.ac)
+        self.menubar.sim.trans = QAction('&Transient', self)
+        self.menubar.sim.addAction(self.menubar.sim.trans)
+        self.menubar.sim.sweep = QAction('&Sweep', self)
+        self.menubar.sim.addAction(self.menubar.sim.sweep)
 
     def pcb(self):
         self.menubar.pcb = QMenu('&PCB', self)
