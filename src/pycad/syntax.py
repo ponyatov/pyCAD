@@ -76,18 +76,18 @@ class Highlighter(QSyntaxHighlighter):
             length = len(tok.value)
 
             format = self.format(tok.type) or FORMAT()
-            self.setFormat(start, length, format)
+            self.setFormat(start, length, format())
 
     def format(self, tok_type):
         match tok_type:
-            case 'KEYWORD': return KEYWORD()
-            case 'NUMBER': return NUMBER()
-            case 'STRING': return STRING()
-            case 'COMMENT': return COMMENT()
-            case 'OPERATOR': return OPERATOR()
-            case 'PAREN': return PAREN()
-            case 'IDENTIFIER': return IDENTIFIER()
-            case 'STDLIB': return STDLIB()
+            case 'KEYWORD': return KEYWORD
+            case 'NUMBER': return NUMBER
+            case 'STRING': return STRING
+            case 'COMMENT': return COMMENT
+            case 'OPERATOR': return OPERATOR
+            case 'PAREN': return PAREN
+            case 'IDENTIFIER': return IDENTIFIER
+            case 'STDLIB': return STDLIB
             case _: return None
 
 #     def highlightBlock(self, text):

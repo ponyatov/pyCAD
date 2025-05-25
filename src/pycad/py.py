@@ -22,7 +22,7 @@ class Highlighter(syntax.Highlighter):
 
     def format(self, tok_type):
         match tok_type:
-            case 'QT': return QT()
+            case 'QT': return QT
             case _: return super().format(tok_type)
 
     # case 'QT':
