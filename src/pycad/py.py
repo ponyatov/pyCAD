@@ -14,42 +14,16 @@ class PyLexer(syntax.Lexer):
 
 from PyQt6.QtGui import *
 
-class QT(syntax.TOKEN):
+class QT(syntax.FORMAT):
     color = QColor("#D659C6")
 
-class Highlighter(QSyntaxHighlighter):
-    def __init__(self, document):
-        super().__init__(document)
-        self.lexer = PyLexer()
+class Highlighter(syntax.Highlighter):
+    lexer = PyLexer()
 
-    def highlightBlock(self, text):
-        self.lexer.lexer.input(text)
-        while True:
-            tok = self.lexer.lexer.token()
-            if not tok:
-                break
+    def format(self, tok_type):
+        match tok_type:
+            case 'QT': return QT()
+            case _: return super().format(tok_type)
 
-            start = tok.lexpos
-            length = len(tok.value)
-
-            match tok.type:
-                case 'KEYWORD':
-                    self.setFormat(start, length, syntax.KEYWORD())
-                case 'NUMBER':
-                    self.setFormat(start, length, syntax.NUMBER())
-                case 'STRING':
-                    self.setFormat(start, length, syntax.STRING())
-                case 'COMMENT':
-                    self.setFormat(start, length, syntax.COMMENT())
-                case 'OPERATOR':
-                    self.setFormat(start, length, syntax.OPERATOR())
-                case 'PAREN':
-                    self.setFormat(start, length, syntax.PAREN())
-                case 'IDENTIFIER':
-                    self.setFormat(start, length, syntax.IDENTIFIER())
-                case 'STDLIB':
-                    self.setFormat(start, length, syntax.STDLIB())
-                case 'QT':
-                    self.setFormat(start, length, QT())
-                case _:
-                    self.setFormat(start, length, syntax.TOKEN())
+    # case 'QT':
+    #     self.setFormat(start, length, QT())
