@@ -15,7 +15,6 @@ class Info:
 import os
 import sys
 
-
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QMainWindow, QMessageBox
 from PyQt6.QtCore import *
@@ -194,8 +193,8 @@ class MainWindow(QMainWindow):
         self.editor = QTextEdit()
         self.setCentralWidget(self.editor)
         self.editor.setFont(QFont("Monospace", 10))
-        # self.view(sys.argv[0])
-        self.view('tmp/xxx')
+        self.view(sys.argv[0])
+        # self.view('tmp/xxx')
 
     def view(self, filename):
         assert os.path.isfile(filename)

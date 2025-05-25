@@ -1,6 +1,66 @@
 from PyQt6.QtGui import *
 from PyQt6.QtCore import QRegularExpression
 
+import ply.lex as lex
+
+class Lexer:
+    tokens = [
+        'KEYWORD',
+        'NUMBER',
+        'STRING',
+        'COMMENT',
+        'OPERATOR',
+        'PAREN',
+        'STDLIB',
+        'IDENTIFIER'
+    ]
+
+    t_ignore = ' \t'
+
+    t_NUMBER = r'\b[+\-]?\d+(\.\d+)?\b'
+    t_OPERATOR = r'[+\-*/%=&|<>!^~]'
+    t_PAREN = r'[\(\)\[\]\{\}]'
+
+    def t_newline(self, t):
+        r'\n+'
+        t.lexer.lineno += len(t.value)
+
+    def t_error(self, t):
+        t.lexer.skip(1)
+
+    def __init__(self):
+        self.lexer = lex.lex(module=self)
+
+class TOKEN(QTextCharFormat):
+    color = QColor("#D4D4D4")
+    weight = QFont.Weight.Normal
+    italic = False
+
+    def __init__(self):
+        super().__init__()
+        self.setForeground(self.color)
+        self.setFontWeight(self.weight)
+        self.setFontItalic(self.italic)
+
+class KEYWORD(TOKEN):
+    color = QColor("#569CD6")
+class NUMBER(TOKEN):
+    color = QColor("#B5CEA8")
+class STRING(TOKEN):
+    color = QColor("#CE9178")
+class COMMENT(TOKEN):
+    color = QColor("#6A9955")
+    italic = True
+class OPERATOR(TOKEN):
+    color = QColor("#D4D44D")
+class PAREN(TOKEN):
+    color = QColor("#4DD4D4")
+class IDENTIFIER(TOKEN):
+    color = QColor("#569CD6")
+class STDLIB(TOKEN):
+    color = QColor("#D69C56")
+
+
 class Highlighter(QSyntaxHighlighter):
     def __init__(self, document):
         super().__init__(document)
