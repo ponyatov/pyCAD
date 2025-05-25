@@ -174,7 +174,7 @@ class MainWindow(QMainWindow):
         self.toolbar = QToolBar("capyBar"); self.addToolBar(self.toolbar)
         self.menu()
         self.status()
-        self.edit()
+        self.init_editor()
         self.filetree()
         self.shell()
 
@@ -184,18 +184,38 @@ class MainWindow(QMainWindow):
         self.statusbar.hello = QLabel(f"{Info.APP} {Info.VERSION}")
         self.statusbar.addPermanentWidget(self.statusbar.hello)
 
-    def edit(self):
+    def init_editor(self):
         self.editor = QTextEdit()
         self.setCentralWidget(self.editor)
         self.editor.setFont(QFont("Monospace", 10))
+        self.view('tmp/xxx')
 
     def view(self, filename):
         assert os.path.isfile(filename)
         self.editor.setReadOnly(True)
         self.editor.setStyleSheet("background-color: #111111;")
+        file = QFile(filename)
+        file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text)
+        stream = QTextStream(file)
+        content = stream.readAll()
+        file.close()
+        self.editor.setPlainText(content)
+
+    def edit(self, filename):
+        self.view(filename)
+        self.editor.setReadOnly(True)
+        self.editor.cursor = self.editor.textCursor()
+        self.editor.setTextCursor(self.editor.cursor)
+        self.editor.cursor.movePosition(QTextCursor.MoveOperation.Start)
+        self.editor.setFocus()
 
     def shell(self):
+        def x(s):
+            f = open('tmp/xxx', 'a')
+            print(s, file=f)
+            f.close()
         self.locals = {
+            'x': x,
             'app': self.app,
             'win': self,
             'os': os,
