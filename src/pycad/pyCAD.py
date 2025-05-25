@@ -16,18 +16,31 @@ import sys
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6.QtCore import QStandardPaths, QSettings
+from PyQt6.QtGui import QPalette, QColor
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, app):
         super().__init__()
+        self.app = app
         self.settings = QSettings(APP, "Theme")
+        self._load_theme()
+
+    def _load_theme(self):
         self.style = self.settings.value("style", "Fusion")
         self.palette = self.settings.value("palette", "darker")
+        # self.app.setStyle(self.style)
+        # if self.palette == 'darker': self._apply_darker()
+
+    def _apply_darker(self):
+        # dark_palette = QPalette()
+        # dark_palette.setColor(QPalette.ColorRole.Window,
+        #                       QColor(0x22, 0x22, 0x22))
+        self.app.setPalette(self.dark_palette)
 
 class pyCAD(QApplication):
     def __init__(self):
         self.app = QApplication(sys.argv)
-        self.win = MainWindow()
+        self.win = MainWindow(self.app)
         self.config()
         self.theme()
 
