@@ -2,7 +2,7 @@
 
 ```e
 # ln -fs ~/{APP}/.unison ~/.unison/{APP}.prf
-# unison {APP}
+# unison {APP} ; git add doc
 
 root = ./doc
 root = /home/dponyatov/E/doc
