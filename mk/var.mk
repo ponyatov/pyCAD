@@ -1,0 +1,1 @@
+APP = $(notdir $(CURDIR))

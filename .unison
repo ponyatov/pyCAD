@@ -1,0 +1,19 @@
+# ln -fs ~/PyCAD/.unison ~/.unison/PyCAD.prf
+# unison PyCAD ; git add doc
+
+root = ./doc
+root = /home/dponyatov/E/doc
+
+prefer = newer
+watch = true
+batch = true
+
+ignore = Name {.git}
+ignore = Name {*~,*.log,*.sw?}
+ignore = Name {bin,tmp,ref,_build,target}
+ignore = Name {doc/html}
+ignore = Name {node_modules,.cache}
+ignore = Name {*.pyc,__pycache__}
+ignore = Name {.venv,cross,root}
+ignore = Name {CMakeCache.txt,CMakeFiles,Makefile,cmake_install.cmake}
+ignore = Name {.DS_Store}
